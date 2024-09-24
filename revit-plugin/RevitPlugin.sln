@@ -1,0 +1,18 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.10.35122.118
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "MasterClass.Revit.SharedProject", "MasterClass.Revit.SharedProject\MasterClass.Revit.SharedProject.shproj", "{71A825BE-E7AD-41C4-B52E-6A60F6350D97}"
+EndProject
+Global
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {C437B730-1178-41B7-AEFE-45AD3464363D}
+	EndGlobalSection
+	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		MasterClass.Revit.SharedProject\MasterClass.Revit.SharedProject.projitems*{71a825be-e7ad-41c4-b52e-6a60f6350d97}*SharedItemsImports = 13
+	EndGlobalSection
+EndGlobal

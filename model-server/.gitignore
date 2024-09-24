@@ -1,0 +1,85 @@
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environment directories
+venv/
+ENV/
+env/
+.venv/
+pip-wheel-metadata/
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.nox/
+.coverage
+coverage.*
+.cache
+nosetests.xml
+pytest_cache/
+pytest.ini
+.testmondata
+*.cover
+.hypothesis/
+.pytest_cache/
+.pytest_cache/
+.stestr/
+tests/.testmondata
+
+# Machine learning model artifacts
+*.h5
+*.hdf5
+*.pkl
+*.joblib
+*.onnx
+*.pt  # PyTorch models
+*.tflite  # TensorFlow Lite models
+*.pb  # TensorFlow Protocol Buffers
+*.bin
+
+# Data files (exclude if datasets are large or reproducible)
+data/
+datasets/
+*.csv
+*.json
+*.parquet
+
+# Hugging Face model caches and files
+huggingface_cache/
+.cache/huggingface/
+.cache/huggingface/datasets/
+.cache/huggingface/transformers/
+.cache/huggingface/models/
+
+# Docker
+*.env
+docker-compose.override.yml
+
+# IDE settings
+.vscode/
+.idea/
+
+# OS-generated files
+.DS_Store
+Thumbs.db
+
+# PyInstaller
+*.spec
+*.exe
+*.dll
+*.dmg
+*.pyz
+*.pyc
+*.pyo
+*.pyd
+
+# pytest
+.pytest_cache/
+.cache/
+
+# Pylint
+pylint.log
