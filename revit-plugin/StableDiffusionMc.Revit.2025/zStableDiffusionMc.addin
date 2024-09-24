@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<RevitAddIns>
+  <AddIn Type="Application">
+    <Name>StableDiffusionMc</Name>
+    <Assembly>RevitPlugin\StableDiffusionMc.Revit.2025.dll</Assembly>
+    <AddInId>EAE463D9-85C1-4151-A4A9-9A138B410061</AddInId>
+    <FullClassName>HCM.Revit.AppCommand</FullClassName>
+    <VendorId>Archi-Lab</VendorId>
+    <VendorDescription>Archi-Lab</VendorDescription>
+  </AddIn>
+</RevitAddIns>

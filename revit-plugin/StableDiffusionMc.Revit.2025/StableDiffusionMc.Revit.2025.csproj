@@ -1,0 +1,38 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <RootNamespace>StableDiffusionMc.Revit</RootNamespace>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="zStableDiffusionMc.addin" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="zStableDiffusionMc.addin">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.3.2" />
+    <PackageReference Include="MathNet.Numerics" Version="5.0.0" />
+    <PackageReference Include="Microsoft.ML.OnnxRuntime" Version="1.19.2" />
+    <PackageReference Include="Microsoft.ML.OnnxRuntime.Gpu.Windows" Version="1.19.2" />
+    <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.135" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageReference Include="NumSharp" Version="0.30.0" />
+    <PackageReference Include="Revit_All_Main_Versions_API_x64" Version="2025.0.0" />
+    <PackageReference Include="SixLabors.ImageSharp" Version="3.1.5" />
+    <PackageReference Include="System.Drawing.Common" Version="8.0.8" />
+    <PackageReference Include="System.Numerics.Vectors" Version="4.5.0" />
+  </ItemGroup>
+
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="echo Copying results to 2025...&#xD;&#xA;if not exist &quot;%25AppData%25\Autodesk\Revit\Addins\2025\StableDiffusionMc&quot; mkdir &quot;%25AppData%25\Autodesk\Revit\Addins\2025\StableDiffusionMc&quot;&#xD;&#xA;xcopy /Q/Y &quot;$(TargetDir)*.dll&quot; &quot;%25AppData%25\Autodesk\Revit\Addins\2025\StableDiffusionMc&quot;&#xD;&#xA;xcopy /Q/Y &quot;$(TargetDir)zStableDiffusionMc.addin&quot; &quot;%25AppData%25\Autodesk\Revit\Addins\2025&quot;" />
+  </Target>
+
+</Project>
