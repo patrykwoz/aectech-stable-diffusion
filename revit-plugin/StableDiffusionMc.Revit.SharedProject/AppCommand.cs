@@ -13,7 +13,7 @@ namespace StableDiffusionMc.Revit.SharedProject
         {
             Instance = this;
 
-            _ = Microsoft.Xaml.Behaviors.TriggerBase.ActionsProperty;
+            //_ = Microsoft.Xaml.Behaviors.TriggerBase.ActionsProperty;
 
             try
             {
@@ -21,7 +21,7 @@ namespace StableDiffusionMc.Revit.SharedProject
             }
             catch (Exception ex)
             {
-                Logger.Fatal(ex);
+                //Logger.Fatal(ex);
             }
 
             var ribbonPanel = app.GetRibbonPanels("Stable Diffusion Mc").FirstOrDefault(x => x.Name == "Stable Diffusion Mc") ??

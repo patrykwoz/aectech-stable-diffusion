@@ -10,11 +10,22 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)AppCommand.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)StableDiffusionApi\StableDiffussionApiView.xaml.cs">
+      <DependentUpon>StableDiffussionApiView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)StableDiffusionApi\StableDiffusionApiCommand.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)StableDiffusionApi\StableDiffusionApiModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)StableDiffusionApi\StableDiffusionApiViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="$(MSBuildThisFileDirectory)StableDiffusionOnnx\" />
     <Folder Include="$(MSBuildThisFileDirectory)StableDiffusion.ML.OnnxRuntime\" />
     <Folder Include="$(MSBuildThisFileDirectory)Resources\" />
-    <Folder Include="$(MSBuildThisFileDirectory)StableDiffusionApi\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="$(MSBuildThisFileDirectory)StableDiffusionApi\StableDiffussionApiView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
 </Project>

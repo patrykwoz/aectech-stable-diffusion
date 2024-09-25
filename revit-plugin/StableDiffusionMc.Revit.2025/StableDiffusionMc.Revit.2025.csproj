@@ -1,8 +1,11 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
+
+    <TargetFramework>net8.0-windows</TargetFramework>
+
     <RootNamespace>StableDiffusionMc.Revit</RootNamespace>
+	<UseWPF>true</UseWPF>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
   </PropertyGroup>
@@ -31,8 +34,14 @@
     <PackageReference Include="System.Numerics.Vectors" Version="4.5.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\StableDiffusionMc.Revit.Core\StableDiffusionMc.Revit.Core.csproj" />
+  </ItemGroup>
+
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
     <Exec Command="echo Copying results to 2025...&#xD;&#xA;if not exist &quot;%25AppData%25\Autodesk\Revit\Addins\2025\StableDiffusionMc&quot; mkdir &quot;%25AppData%25\Autodesk\Revit\Addins\2025\StableDiffusionMc&quot;&#xD;&#xA;xcopy /Q/Y &quot;$(TargetDir)*.dll&quot; &quot;%25AppData%25\Autodesk\Revit\Addins\2025\StableDiffusionMc&quot;&#xD;&#xA;xcopy /Q/Y &quot;$(TargetDir)zStableDiffusionMc.addin&quot; &quot;%25AppData%25\Autodesk\Revit\Addins\2025&quot;" />
   </Target>
+
+  <Import Project="..\StableDiffusionMc.Revit.SharedProject\StableDiffusionMc.Revit.SharedProject.projitems" Label="Shared" />
 
 </Project>

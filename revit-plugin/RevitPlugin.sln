@@ -5,9 +5,9 @@ VisualStudioVersion = 17.10.35122.118
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "StableDiffusionMc.Revit.SharedProject", "StableDiffusionMc.Revit.SharedProject\StableDiffusionMc.Revit.SharedProject.shproj", "{FB95F051-60AA-4C81-8FAB-397E5F68BCA7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StableDiffusionMc.Revit.2025", "StableDiffusionMc.Revit.2025\StableDiffusionMc.Revit.2025.csproj", "{F40276D8-3407-4941-9C41-E6FFB55718C7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StableDiffusionMc.Revit.2025", "StableDiffusionMc.Revit.2025\StableDiffusionMc.Revit.2025.csproj", "{F40276D8-3407-4941-9C41-E6FFB55718C7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StableDiffusionMc.Revit.Core", "StableDiffusionMc.Revit.Core\StableDiffusionMc.Revit.Core.csproj", "{A1585E33-A663-41B6-86A0-1E62C08936A6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StableDiffusionMc.Revit.Core", "StableDiffusionMc.Revit.Core\StableDiffusionMc.Revit.Core.csproj", "{A1585E33-A663-41B6-86A0-1E62C08936A6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -31,6 +31,7 @@ Global
 		SolutionGuid = {6B47907C-F870-4430-B2E3-77FF47D39D5E}
 	EndGlobalSection
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		StableDiffusionMc.Revit.SharedProject\StableDiffusionMc.Revit.SharedProject.projitems*{f40276d8-3407-4941-9c41-e6ffb55718c7}*SharedItemsImports = 5
 		StableDiffusionMc.Revit.SharedProject\StableDiffusionMc.Revit.SharedProject.projitems*{fb95f051-60aa-4c81-8fab-397e5f68bca7}*SharedItemsImports = 13
 	EndGlobalSection
 EndGlobal
