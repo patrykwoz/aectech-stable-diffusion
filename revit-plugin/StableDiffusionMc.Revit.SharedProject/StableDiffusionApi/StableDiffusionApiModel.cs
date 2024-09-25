@@ -37,7 +37,7 @@ namespace StableDiffusionMc.Revit.StableDiffusionApi
                 FilePath = imagePath,
                 FitDirection = FitDirectionType.Horizontal,
                 HLRandWFViewsFileType = ImageFileType.PNG,
-                ImageResolution = ImageResolution.DPI_300,
+                ImageResolution = ImageResolution.DPI_600,
                 ZoomType = ZoomFitType.FitToPage,
                 PixelSize = 1024
 
@@ -48,7 +48,12 @@ namespace StableDiffusionMc.Revit.StableDiffusionApi
             return imagePath;
         }
 
-        public async Task<string> SendToServerAsync(string imagePath, string prompt)
+        public async Task<string> SendToServerAsync(
+            string imagePath,
+            string prompt,
+            double guidanceScale = 7.5,
+            double strength = 0.85
+            )
         {
             if (!File.Exists(imagePath))
             {
@@ -57,6 +62,9 @@ namespace StableDiffusionMc.Revit.StableDiffusionApi
 
             using (var client = new HttpClient())
             {
+                var query = $"?prompt={prompt}&guidance_scale={guidanceScale}&strength={strength}";
+
+
                 client.BaseAddress = new Uri("http://127.0.0.1:8000");
                 client.DefaultRequestHeaders.Accept.Clear();
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
@@ -68,11 +76,7 @@ namespace StableDiffusionMc.Revit.StableDiffusionApi
                     streamContent.Headers.ContentType = new MediaTypeHeaderValue("image/png");
                     content.Add(streamContent, "file", Path.GetFileName(imagePath));
 
-                    content.Add(new StringContent(prompt), "prompt");
-                    content.Add(new StringContent("7.5"), "guidance_scale");
-                    content.Add(new StringContent("0.85"), "strength");
-
-                    HttpResponseMessage response = await client.PostAsync("/generate-memory", content);
+                    HttpResponseMessage response = await client.PostAsync($"/generate-memory{query}", content);
 
                     if (response.IsSuccessStatusCode)
                     {

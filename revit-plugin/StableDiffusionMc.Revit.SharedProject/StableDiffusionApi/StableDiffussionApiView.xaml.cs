@@ -23,6 +23,14 @@ namespace StableDiffusionMc.Revit.StableDiffusionApi
                     case nameof(PromptTextBox):
                         viewModel.Prompt = textBox.Text;
                         break;
+                    case nameof(GuidanceScaleTextBox):
+                        if (double.TryParse(textBox.Text, out var guidanceScale))
+                            viewModel.GuidanceScale = guidanceScale;
+                        break;
+                    case nameof(StrengthTextBox):
+                        if (double.TryParse(textBox.Text, out var strength))
+                            viewModel.Strength = strength;
+                        break;
                 }
             }
         }

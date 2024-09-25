@@ -16,21 +16,113 @@
     </b:Interaction.Triggers>
 
     <Grid>
-		<StackPanel
-			HorizontalAlignment="Center"
-			Orientation="Vertical"
-			>
-			<Image
+		<Grid.RowDefinitions>
+			<RowDefinition Height="*" />
+			<RowDefinition Height="60" />
+		</Grid.RowDefinitions>
+		<Image Grid.Row="0"
 				Source="{Binding GeneratedImagePath, Mode=OneWay}"
 				Stretch="UniformToFill"
 				HorizontalAlignment="Stretch"
 				VerticalAlignment="Stretch"
 				
 				/>
+		<StackPanel Grid.Row="1"
+			HorizontalAlignment="Center"
+			Orientation="Vertical"
+			>
+			
+			
+			<StackPanel
+				Orientation="Horizontal"
+                HorizontalAlignment="Left"
+				>
+				<Label
+					Content="Prompt:"
+					HorizontalAlignment="Left"
+					VerticalAlignment="Center"
+					VerticalContentAlignment="Center"
+					Foreground="Black"
+					FontWeight="Bold"
+					FontSize="10"
+					Width="100"
+					Height="20"/>
+				<TextBox
+					Name="PromptTextBox"
+					Text="Enter a prompt..."
+					TextChanged="TextBox_TextChanged"
+					GotFocus="TextBox_GotFocus"
+					LostFocus="TextBox_LostFocus"
+					Foreground="Gray"
+					FontSize="10"
+				
+					HorizontalAlignment="Left"
+					VerticalAlignment="Center"
+					Width="500"
+					Height="20"/>
+				
+				
+			</StackPanel>
+			<StackPanel
+				Orientation="Horizontal"
+                HorizontalAlignment="Left"
+				>
+				<Label
+					Content="Strength:"
+					HorizontalAlignment="Left"
+					VerticalAlignment="Center"
+					VerticalContentAlignment="Center"
+					Foreground="Black"
+					FontWeight="Bold"
+					FontSize="10"
+					Width="100"
+					Height="20"/>
+				<TextBox
+					Name="StrengthTextBox"
+					Text="0.85"
+					TextChanged="TextBox_TextChanged"
+					GotFocus="TextBox_GotFocus"
+					LostFocus="TextBox_LostFocus"
+					Foreground="Gray"
+					FontSize="10"
+				
+					HorizontalAlignment="Left"
+					VerticalAlignment="Center"
+					Width="100"
+					Height="20"/>
+				<Label
+					Content="GuidanceScale:"
+					HorizontalAlignment="Left"
+					VerticalAlignment="Center"
+					VerticalContentAlignment="Center"
+					Foreground="Black"
+					FontWeight="Bold"
+					FontSize="10"
+					Width="100"
+					Height="20"/>
+				<TextBox
+					Name="GuidanceScaleTextBox"
+					Text="7.5"
+					TextChanged="TextBox_TextChanged"
+					GotFocus="TextBox_GotFocus"
+					LostFocus="TextBox_LostFocus"
+					Foreground="Gray"
+					FontSize="10"
+				
+					HorizontalAlignment="Left"
+					VerticalAlignment="Center"
+					Width="100"
+					Height="20"/>
+
+
+				
+
+
+			</StackPanel>
 			<StackPanel
 				Orientation="Horizontal"
                 HorizontalAlignment="Center">
-				
+
 				<Button
                     Content="Generate"
                     Command="{Binding Generate, Mode=OneWay}"
@@ -38,29 +130,11 @@
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center"
                     Width="100"
-                    Height="25" />
-				
+                    Height="20" />
+
 			</StackPanel>
-			<Label
-				Content="Prompt:"
-                HorizontalAlignment="Center"
-                VerticalAlignment="Center"
-                Width="100"
-                Height="25"/>
-			<TextBox
-				Name="PromptTextBox"
-                Text="Enter a prompt..."
-                TextChanged="TextBox_TextChanged"
-                GotFocus="TextBox_GotFocus"
-                LostFocus="TextBox_LostFocus"
-                Foreground="Gray"
-				
-				HorizontalAlignment="Left"
-				VerticalAlignment="Center"
-				Width="500"
-				Height="25"/>
-			<TextBox
-				Text="{Binding Prompt, Mode=OneWay}"/>
+			
+			
 			
 		</StackPanel>
 

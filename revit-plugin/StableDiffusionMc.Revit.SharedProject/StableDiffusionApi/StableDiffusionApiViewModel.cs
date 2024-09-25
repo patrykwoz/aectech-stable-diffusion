@@ -43,6 +43,23 @@ namespace StableDiffusionMc.Revit.StableDiffusionApi
             set { _prompt = value; OnPropertyChanged(); }
         }
 
+        private double _guidanceScale = 7.5;
+
+        public double GuidanceScale
+        {
+            get { return _guidanceScale; }
+            set { _guidanceScale = value; OnPropertyChanged(); }
+        }
+
+        private double _strength = 0.85;
+
+        public double Strength
+        {
+            get { return _strength; }
+            set { _strength = value; OnPropertyChanged(); }
+        }
+
+
         public StableDiffusionApiViewModel(StableDiffusionApiModel model)
         {
             Model = model;
@@ -67,7 +84,12 @@ namespace StableDiffusionMc.Revit.StableDiffusionApi
                 return;
             }
 
-            var generatedImagePath = await Model.SendToServerAsync(capturedImagePath, Prompt);
+            var generatedImagePath = await Model.SendToServerAsync(
+                capturedImagePath,
+                Prompt,
+                GuidanceScale,
+                Strength
+                );
 
             if (string.IsNullOrEmpty(generatedImagePath))
             {
@@ -84,7 +106,7 @@ namespace StableDiffusionMc.Revit.StableDiffusionApi
             Win = (StableDiffusionApiView)win;
 
             var capturedImagePath = Model.ExportViewAsImagePath();
-            var testPath = "C:\\Users\\patry\\Desktop\\stableDifussionBuildingSample.png";
+            //var testPath = "C:\\Users\\patry\\Desktop\\stableDifussionBuildingSample.png";
 
             GeneratedImagePath = capturedImagePath;
         }
