@@ -7,8 +7,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
     mc:Ignorable="d"
-    d:DesignHeight="300"
-    d:DesignWidth="400">
+    >
     <b:Interaction.Triggers>
         <b:EventTrigger EventName="Loaded">
             <b:InvokeCommandAction Command="{Binding WindowLoaded}" CommandParameter="{Binding ElementName=Win}" />
@@ -38,15 +37,16 @@
                 HorizontalAlignment="Left"
 				>
 				<Label
-					Content="Prompt:"
 					HorizontalAlignment="Left"
 					VerticalAlignment="Center"
-					VerticalContentAlignment="Center"
-					Foreground="Black"
-					FontWeight="Bold"
-					FontSize="10"
 					Width="100"
-					Height="20"/>
+					Height="20">
+					<TextBlock
+						Text="Prompt:"
+						Foreground="Black"
+						FontWeight="Bold" FontSize="10"
+						VerticalAlignment="Center"/>
+				</Label>
 				<TextBox
 					Name="PromptTextBox"
 					Text="Enter a prompt..."
@@ -67,16 +67,10 @@
 				Orientation="Horizontal"
                 HorizontalAlignment="Left"
 				>
-				<Label
-					Content="Strength:"
-					HorizontalAlignment="Left"
-					VerticalAlignment="Center"
-					VerticalContentAlignment="Center"
-					Foreground="Black"
-					FontWeight="Bold"
-					FontSize="10"
-					Width="100"
-					Height="20"/>
+				<Label HorizontalAlignment="Left" VerticalAlignment="Center" Width="100" Height="20">
+					<TextBlock Text="Strength:" Foreground="Black" FontWeight="Bold" FontSize="10" VerticalAlignment="Center" />
+				</Label>
+
 				<TextBox
 					Name="StrengthTextBox"
 					Text="0.85"
@@ -90,16 +84,10 @@
 					VerticalAlignment="Center"
 					Width="100"
 					Height="20"/>
-				<Label
-					Content="GuidanceScale:"
-					HorizontalAlignment="Left"
-					VerticalAlignment="Center"
-					VerticalContentAlignment="Center"
-					Foreground="Black"
-					FontWeight="Bold"
-					FontSize="10"
-					Width="100"
-					Height="20"/>
+				<Label HorizontalAlignment="Left" VerticalAlignment="Center" Width="100" Height="20">
+					<TextBlock Text="GuidanceScale:" Foreground="Black" FontWeight="Bold" FontSize="10" VerticalAlignment="Center" />
+				</Label>
+
 				<TextBox
 					Name="GuidanceScaleTextBox"
 					Text="7.5"
@@ -121,7 +109,8 @@
 			</StackPanel>
 			<StackPanel
 				Orientation="Horizontal"
-                HorizontalAlignment="Center">
+                HorizontalAlignment="Center"
+				>
 
 				<Button
                     Content="Generate"
@@ -131,6 +120,15 @@
                     VerticalAlignment="Center"
                     Width="100"
                     Height="20" />
+				<Button
+                    Content="Generate ONNX"
+                    Command="{Binding GenerateOnnx, Mode=OneWay}"
+                    CommandParameter="{Binding ElementName=Win}"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    Width="100"
+                    Height="20"
+					Margin ="100,0,0,0"/>
 
 			</StackPanel>
 			

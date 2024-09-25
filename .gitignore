@@ -8,3 +8,9 @@
 *.tflite  # TensorFlow Lite models
 *.pb  # TensorFlow Protocol Buffers
 *.bin
+
+*/text_encoder
+*/text_encoder_2
+*/unet
+*/vae_decoder
+*/vae_encoder

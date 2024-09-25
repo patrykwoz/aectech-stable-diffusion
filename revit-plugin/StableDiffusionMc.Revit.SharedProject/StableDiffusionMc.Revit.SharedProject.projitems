@@ -10,6 +10,15 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)AppCommand.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)StableDiffusion.ML.OnnxRuntime\EulerAncestralDiscreteScheduler.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)StableDiffusion.ML.OnnxRuntime\LMSDiscreteScheduler.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)StableDiffusion.ML.OnnxRuntime\SafetyChecker.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)StableDiffusion.ML.OnnxRuntime\SchedulerBase.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)StableDiffusion.ML.OnnxRuntime\StableDiffusionConfig.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)StableDiffusion.ML.OnnxRuntime\TensorHelper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)StableDiffusion.ML.OnnxRuntime\TextProcessing.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)StableDiffusion.ML.OnnxRuntime\UNet.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)StableDiffusion.ML.OnnxRuntime\VaeDecoder.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)StableDiffusionApi\StableDiffussionApiView.xaml.cs">
       <DependentUpon>StableDiffussionApiView.xaml</DependentUpon>
     </Compile>
@@ -19,7 +28,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="$(MSBuildThisFileDirectory)StableDiffusionOnnx\" />
-    <Folder Include="$(MSBuildThisFileDirectory)StableDiffusion.ML.OnnxRuntime\" />
   </ItemGroup>
   <ItemGroup>
     <Page Include="$(MSBuildThisFileDirectory)StableDiffusionApi\StableDiffussionApiView.xaml">
