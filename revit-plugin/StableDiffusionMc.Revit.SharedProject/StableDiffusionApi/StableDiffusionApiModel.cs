@@ -33,11 +33,14 @@ namespace StableDiffusionMc.Revit.StableDiffusionApi
 
             var options = new ImageExportOptions
             {
-                ExportRange = ExportRange.CurrentView,
+                ExportRange = ExportRange.VisibleRegionOfCurrentView,
                 FilePath = imagePath,
                 FitDirection = FitDirectionType.Horizontal,
                 HLRandWFViewsFileType = ImageFileType.PNG,
-                ImageResolution = ImageResolution.DPI_300
+                ImageResolution = ImageResolution.DPI_300,
+                ZoomType = ZoomFitType.FitToPage,
+                PixelSize = 1024
+
             };
 
             Doc.ExportImage(options);

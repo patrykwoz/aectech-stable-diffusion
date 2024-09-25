@@ -42,7 +42,7 @@ namespace StableDiffusionMc.Revit.StableDiffusionApi
             }
             catch (Exception ex)
             {
-                //ignored
+                //ignored for now
             }
 
             return Result.Succeeded;

@@ -4,6 +4,10 @@ using System.Text;
 using CommunityToolkit.Mvvm.Input;
 using System.Windows;
 using StableDiffusionMc.Revit.Core.Utilities.WPF;
+using System.Collections.ObjectModel;
+using CommunityToolkit.Mvvm.ComponentModel;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace StableDiffusionMc.Revit.StableDiffusionApi
 {
@@ -13,12 +17,31 @@ namespace StableDiffusionMc.Revit.StableDiffusionApi
 
         public StableDiffusionApiView Win { get; set; }
 
+        public RelayCommand Generate { get; set; }
 
+        public string WorkingDirectory { get; set; }
 
-        public RelayCommand<Window> Close { get; set; }
+        private string _testImagePath;
+        public string TestImagePath
+        {
+            get { return _testImagePath; }
+            set { _testImagePath = value; OnPropertyChanged(); }
+        }
 
+        private string _generatedImagePath;
 
+        public string GeneratedImagePath
+        {
+            get { return _generatedImagePath; }
+            set { _generatedImagePath = value; OnPropertyChanged(); }
+        }
 
+        private string _prompt= "Enter a prompt...";
+        public string Prompt
+        {
+            get { return _prompt; }
+            set { _prompt = value; OnPropertyChanged(); }
+        }
 
         public StableDiffusionApiViewModel(StableDiffusionApiModel model)
         {
@@ -28,32 +51,42 @@ namespace StableDiffusionMc.Revit.StableDiffusionApi
             Ok = new RelayCommand<Window>(OnOk);
             Cancel = new RelayCommand<Window>(OnCancel);
             Help = new RelayCommand(OnHelp);
-
+            Generate = new RelayCommand(OnGenerate);
 
             //var testPath = "C:\\Users\\patry\\Desktop\\stableDifussionBuildingSample.png";
             //GeneratedImages.Add(testPath);
             //TestImagePath = testPath;
-
-        }
-
-        private void OnCapture()
-        {
-
         }
 
         private async void OnGenerate()
         {
+            var capturedImagePath = Model.ExportViewAsImagePath();
+            if (string.IsNullOrEmpty(capturedImagePath))
+            {
+                MessageBox.Show("Failed to capture image");
+                return;
+            }
 
-        }
+            var generatedImagePath = await Model.SendToServerAsync(capturedImagePath, Prompt);
 
-        private void OnClose(Window win)
-        {
-            win.Close();
+            if (string.IsNullOrEmpty(generatedImagePath))
+            {
+                MessageBox.Show("Failed to generate image");
+                return;
+            }
+
+            GeneratedImagePath = generatedImagePath;
+
         }
 
         public override void OnWindowLoaded(Window win)
         {
             Win = (StableDiffusionApiView)win;
+
+            var capturedImagePath = Model.ExportViewAsImagePath();
+            var testPath = "C:\\Users\\patry\\Desktop\\stableDifussionBuildingSample.png";
+
+            GeneratedImagePath = capturedImagePath;
         }
 
         public override void OnOk(Window win)
@@ -63,7 +96,7 @@ namespace StableDiffusionMc.Revit.StableDiffusionApi
 
         public override void OnCancel(Window win)
         {
-            win.Close();
+            Win.Close();
         }
 
         public override void OnHelp()

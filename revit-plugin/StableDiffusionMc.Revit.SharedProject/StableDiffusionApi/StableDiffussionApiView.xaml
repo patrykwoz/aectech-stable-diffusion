@@ -16,6 +16,53 @@
     </b:Interaction.Triggers>
 
     <Grid>
+		<StackPanel
+			HorizontalAlignment="Center"
+			Orientation="Vertical"
+			>
+			<Image
+				Source="{Binding GeneratedImagePath, Mode=OneWay}"
+				Stretch="UniformToFill"
+				HorizontalAlignment="Stretch"
+				VerticalAlignment="Stretch"
+				
+				/>
+			<StackPanel
+				Orientation="Horizontal"
+                HorizontalAlignment="Center">
+				
+				<Button
+                    Content="Generate"
+                    Command="{Binding Generate, Mode=OneWay}"
+                    CommandParameter="{Binding ElementName=Win}"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    Width="100"
+                    Height="25" />
+				
+			</StackPanel>
+			<Label
+				Content="Prompt:"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Width="100"
+                Height="25"/>
+			<TextBox
+				Name="PromptTextBox"
+                Text="Enter a prompt..."
+                TextChanged="TextBox_TextChanged"
+                GotFocus="TextBox_GotFocus"
+                LostFocus="TextBox_LostFocus"
+                Foreground="Gray"
+				
+				HorizontalAlignment="Left"
+				VerticalAlignment="Center"
+				Width="500"
+				Height="25"/>
+			<TextBox
+				Text="{Binding Prompt, Mode=OneWay}"/>
+			
+		</StackPanel>
 
     </Grid>
 </Window>
