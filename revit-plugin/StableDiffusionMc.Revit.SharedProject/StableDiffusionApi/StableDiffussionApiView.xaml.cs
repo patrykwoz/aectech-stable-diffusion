@@ -1,4 +1,4 @@
-﻿namespace StableDiffusionMc.Revit.SharedProject.StableDiffusionApi
+﻿namespace StableDiffusionMc.Revit.StableDiffusionApi
 {
     public sealed partial class StableDiffusionApiView
     {

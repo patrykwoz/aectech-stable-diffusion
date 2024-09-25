@@ -6,7 +6,7 @@
     <SharedGUID>fb95f051-60aa-4c81-8fab-397e5f68bca7</SharedGUID>
   </PropertyGroup>
   <PropertyGroup Label="Configuration">
-    <Import_RootNamespace>StableDiffusionMc.Revit.SharedProject</Import_RootNamespace>
+    <Import_RootNamespace>StableDiffusionMc.Revit</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)AppCommand.cs" />
@@ -20,12 +20,16 @@
   <ItemGroup>
     <Folder Include="$(MSBuildThisFileDirectory)StableDiffusionOnnx\" />
     <Folder Include="$(MSBuildThisFileDirectory)StableDiffusion.ML.OnnxRuntime\" />
-    <Folder Include="$(MSBuildThisFileDirectory)Resources\" />
   </ItemGroup>
   <ItemGroup>
     <Page Include="$(MSBuildThisFileDirectory)StableDiffusionApi\StableDiffussionApiView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\32x32\lightning.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
   </ItemGroup>
 </Project>

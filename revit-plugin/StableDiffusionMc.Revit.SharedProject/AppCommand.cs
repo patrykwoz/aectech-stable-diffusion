@@ -2,10 +2,11 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Microsoft.Xaml.Behaviors;
 
-namespace StableDiffusionMc.Revit.SharedProject
+namespace StableDiffusionMc.Revit
 {
-    internal class AppCommand : IExternalApplication
+    public class AppCommand : IExternalApplication
     {
         public static AppCommand Instance;
 
@@ -13,7 +14,7 @@ namespace StableDiffusionMc.Revit.SharedProject
         {
             Instance = this;
 
-            //_ = Microsoft.Xaml.Behaviors.TriggerBase.ActionsProperty;
+            _ = TriggerBase.ActionsProperty;
 
             try
             {
@@ -26,10 +27,8 @@ namespace StableDiffusionMc.Revit.SharedProject
 
             var ribbonPanel = app.GetRibbonPanels("Stable Diffusion Mc").FirstOrDefault(x => x.Name == "Stable Diffusion Mc") ??
                               app.CreateRibbonPanel("Stable Diffusion Mc", $"Stable Diffusion Mc - {typeof(AppCommand).Assembly.GetName().Version}");
-
-            //ViewOpenerPlateCommand.CreateButton(ribbonPanel);
-            //ribbonPanel.AddSeparator();
-            //AutoDimensioningPlatesCommand.CreateButton(ribbonPanel);
+            
+            StableDiffusionApi.StableDiffusionApiCommand.CreateButton(ribbonPanel);
 
 
             return Result.Succeeded;

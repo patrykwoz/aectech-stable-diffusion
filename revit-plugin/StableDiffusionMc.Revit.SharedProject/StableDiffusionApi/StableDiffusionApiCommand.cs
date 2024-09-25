@@ -7,11 +7,14 @@ using System.Diagnostics;
 using System.Reflection;
 using System.Text;
 using System.Windows.Interop;
+using StableDiffusionMc.Revit.Core.Utilities;
 
-namespace StableDiffusionMc.Revit.SharedProject.StableDiffusionApi
+namespace StableDiffusionMc.Revit.StableDiffusionApi
 {
-
-    internal class StableDiffusionApiCommand : IExternalCommand
+    [Transaction(TransactionMode.Manual)]
+    [Regeneration(RegenerationOption.Manual)]
+    [Journaling(JournalingMode.NoCommandData)]
+    public class StableDiffusionApiCommand : IExternalCommand
     {
 
         public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elements)
@@ -56,7 +59,7 @@ namespace StableDiffusionMc.Revit.SharedProject.StableDiffusionApi
                     MethodBase.GetCurrentMethod()?.DeclaringType?.FullName)
                 {
                     ToolTip = "Generate images using Stable Diffusion",
-                    LargeImage = ImageUtils.LoadImage(assembly, "_32x32.thirdButton.png"),
+                    LargeImage = ImageUtils.LoadImage(assembly, "_32x32.lightning.png"),
                 });
         }
     }

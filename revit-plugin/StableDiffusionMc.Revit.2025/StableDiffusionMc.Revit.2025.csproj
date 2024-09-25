@@ -7,7 +7,13 @@
     <RootNamespace>StableDiffusionMc.Revit</RootNamespace>
 	<UseWPF>true</UseWPF>
     <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
+    <Nullable>disable</Nullable>
+	<GenerateAssemblyInfo>true</GenerateAssemblyInfo>
+	<GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
+	<GenerateDependencyFile>true</GenerateDependencyFile>
+
+	<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+
   </PropertyGroup>
 
   <ItemGroup>

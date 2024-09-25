@@ -7,7 +7,7 @@ using System.Net.Http.Headers;
 using System.Net.Http;
 using System.Text;
 
-namespace StableDiffusionMc.Revit.SharedProject.StableDiffusionApi
+namespace StableDiffusionMc.Revit.StableDiffusionApi
 {
     public class StableDiffusionApiModel
     {
