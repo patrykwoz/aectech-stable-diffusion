@@ -128,13 +128,6 @@ namespace StableDiffusionMc.Revit.StableDiffusion.ML.OnnxRuntime
 
             // Decode image
             var imageResultTensor = VaeDecoder.Decoder(decoderInput, config);
-            var isNotSafe = SafetyChecker.IsNotSafe(imageResultTensor, config);
-
-            if (isNotSafe)
-            {
-                return null;
-
-            }
             var image = VaeDecoder.ConvertToImage(imageResultTensor, config);
             return image;
 

@@ -11,27 +11,6 @@ namespace StableDiffusionMc.Revit.StableDiffusion.ML.OnnxRuntime
 {
     public static class SafetyChecker
     {
-        public static bool IsNotSafe(Tensor<float> resultImage, StableDiffusionConfig config)
-        {
-            //clip input
-            var inputTensor = ClipImageFeatureExtractor(resultImage, config);
-            //images input
-            var inputImagesTensor = ReorderTensor(inputTensor);
-
-            var input = new List<NamedOnnxValue> { //batch channel height width
-                                                    NamedOnnxValue.CreateFromTensor("clip_input", inputTensor),
-                                                    //batch, height, width, channel
-                                                    NamedOnnxValue.CreateFromTensor("images", inputImagesTensor)};
-
-            var sessionOptions = config.GetSessionOptionsForEp();
-            var session = new InferenceSession(config.SafetyModelPath, sessionOptions);
-
-            // Run session and send the input data in to get inference output. 
-            var output = session.Run(input);
-            var result = (output.ToList().Last().Value as IEnumerable<bool>).ToArray()[0];
-
-            return result;
-        }
 
         private static DenseTensor<float> ReorderTensor(Tensor<float> inputTensor)
         {

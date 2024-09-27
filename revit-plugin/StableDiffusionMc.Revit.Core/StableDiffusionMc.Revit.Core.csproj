@@ -15,13 +15,17 @@
 	<GenerateDependencyFile>false</GenerateDependencyFile>
 
 	<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+
+	<Platforms>AnyCPU;x64</Platforms>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.3.2" />
     <PackageReference Include="MathNet.Numerics" Version="5.0.0" />
-    <PackageReference Include="Microsoft.ML.OnnxRuntime" Version="1.19.2" />
+    <PackageReference Include="Microsoft.ML" Version="3.0.1" />
+    <PackageReference Include="Microsoft.ML.OnnxRuntime.Extensions" Version="0.12.0" />
     <PackageReference Include="Microsoft.ML.OnnxRuntime.Gpu.Windows" Version="1.19.2" />
+    <PackageReference Include="Microsoft.ML.OnnxRuntime.Managed" Version="1.19.2" />
     <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.135" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="NumSharp" Version="0.30.0" />

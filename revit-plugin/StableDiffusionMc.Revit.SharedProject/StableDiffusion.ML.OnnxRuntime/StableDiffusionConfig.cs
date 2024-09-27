@@ -22,11 +22,11 @@ namespace StableDiffusionMc.Revit.StableDiffusion.ML.OnnxRuntime
         public int DeviceId = 0;
 
 
-        public string TokenizerOnnxPath = "cliptokenizer.onnx";
+        public string TokenizerOnnxPath = "./cliptokenizer.onnx";
         public string TextEncoderOnnxPath = "";
         public string UnetOnnxPath = "";
         public string VaeDecoderOnnxPath = "";
-        public string SafetyModelPath = "";
+        //public string SafetyModelPath = "";
 
         // default directory for images
         public string ImageOutputPath = "";
