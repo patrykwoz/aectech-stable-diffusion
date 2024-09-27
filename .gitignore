@@ -15,3 +15,9 @@
 */vae_decoder
 */vae_encoder
 */models
+*/sd_img_img_onnx
+*/venv
+*/.ipynb_checkpoints
+*/.vscode
+*/.pytest_cache
+*/__pycache__

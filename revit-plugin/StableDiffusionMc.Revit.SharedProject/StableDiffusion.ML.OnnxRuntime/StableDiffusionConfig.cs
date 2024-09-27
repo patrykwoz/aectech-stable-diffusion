@@ -22,7 +22,7 @@ namespace StableDiffusionMc.Revit.StableDiffusion.ML.OnnxRuntime
         public int DeviceId = 0;
 
 
-        public string TokenizerOnnxPath = "./cliptokenizer.onnx";
+        public string TokenizerOnnxPath = @"C:\Users\patry\source\repos\aectech-stable-diffusion\revit-plugin\models\cliptokenizer.onnx";
         public string TextEncoderOnnxPath = "";
         public string UnetOnnxPath = "";
         public string VaeDecoderOnnxPath = "";

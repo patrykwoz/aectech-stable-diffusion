@@ -117,25 +117,36 @@ namespace StableDiffusionMc.Revit.StableDiffusionApi
             }
 
 
-            var options = new SessionOptions();
+            //var options = new SessionOptions();
 
 
 
+            string generatedImagePath = null;
+
+            //var basicGenImgPath = await BasicInference(
+            //    capturedImagePath,
+            //    Prompt,
+            //    GuidanceScale,
+            //    Strength
+            //    );
+            Debug.WriteLine("Starting Onnx Inference");
+            try
+            {
+                generatedImagePath = await InferWithOnnx(
+                capturedImagePath,
+                Prompt,
+                GuidanceScale,
+                Strength
+                );
+
+                Debug.WriteLine("Finished Onnx Inference");
+
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e.Message);
+            }
             
-
-            var basicGenImgPath = await BasicInference(
-                capturedImagePath,
-                Prompt,
-                GuidanceScale,
-                Strength
-                );
-
-            var generatedImagePath = await InferWithOnnx(
-                capturedImagePath,
-                Prompt,
-                GuidanceScale,
-                Strength
-                );
 
             if (string.IsNullOrEmpty(generatedImagePath))
             {

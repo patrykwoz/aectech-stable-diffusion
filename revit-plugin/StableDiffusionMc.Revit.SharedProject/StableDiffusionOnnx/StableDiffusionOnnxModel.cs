@@ -6,6 +6,7 @@ using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Memory;
 using StableDiffusionMc.Revit.StableDiffusion.ML.OnnxRuntime;
 using Microsoft.ML.OnnxRuntime;
+using System.Diagnostics;
 
 namespace StableDiffusionMc.Revit.StableDiffusionOnnx
 {
@@ -31,12 +32,14 @@ namespace StableDiffusionMc.Revit.StableDiffusionOnnx
                 // To use DirectML EP intall the Microsoft.ML.OnnxRuntime.DirectML and uninstall Microsoft.ML.OnnxRuntime.GPU
                 ExecutionProviderTarget = StableDiffusionConfig.ExecutionProvider.Cuda,
                 // Set GPU Device ID.
-                DeviceId = 2,
+                DeviceId = 0,
                 // Update paths to your models
                 TextEncoderOnnxPath = Path.Combine(modelsBasePath, "text_encoder", "model.onnx"),
                 UnetOnnxPath = Path.Combine(modelsBasePath, "unet", "model.onnx"),
                 VaeDecoderOnnxPath = Path.Combine(modelsBasePath, "vae_decoder", "model.onnx"),
             };
+
+            Debug.WriteLine($"Inference with prompt: {prompt}");
 
             var image = UNet.Inference(prompt, config);
 
