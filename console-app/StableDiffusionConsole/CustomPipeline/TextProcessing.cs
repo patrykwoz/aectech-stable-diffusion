@@ -3,13 +3,12 @@ using Microsoft.ML.OnnxRuntime;
 using System;
 using System.Collections.Generic;
 using System.Text;
-using StableDiffusion.ML.OnnxRuntime;
 
-namespace StableDiffusionMc.Revit.StableDiffusion.ML.OnnxRuntime
+namespace StableDiffusionConsole.CustomPipeline
 {
     public class TextProcessing
     {
-        public static DenseTensor<float> PreprocessText(String prompt, StableDiffusionConfig config)
+        public static DenseTensor<float> PreprocessText(string prompt, StableDiffusionConfig config)
         {
             // Load the tokenizer and text encoder to tokenize and encode the text.
             var textTokenized = TokenizeText(prompt, config);
@@ -38,13 +37,13 @@ namespace StableDiffusionMc.Revit.StableDiffusion.ML.OnnxRuntime
             // Create an InferenceSession from the onnx clip tokenizer.
             var tokenizeSession = new InferenceSession(config.TokenizerOnnxPath, sessionOptions);
             var inputTensor = new DenseTensor<string>(new string[] { text }, new int[] { 1 });
-            var inputString = new List<NamedOnnxValue> { NamedOnnxValue.CreateFromTensor<string>("string_input", inputTensor) };
+            var inputString = new List<NamedOnnxValue> { NamedOnnxValue.CreateFromTensor("string_input", inputTensor) };
             // Run session and send the input data in to get inference output. 
             var tokens = tokenizeSession.Run(inputString);
 
 
             var inputIds = (tokens.ToList().First().Value as IEnumerable<long>).ToArray();
-            Console.WriteLine(String.Join(" ", inputIds));
+            Console.WriteLine(string.Join(" ", inputIds));
 
             // Cast inputIds to Int32
             var InputIdsInt = inputIds.Select(x => (int)x).ToArray();
@@ -66,7 +65,7 @@ namespace StableDiffusionMc.Revit.StableDiffusion.ML.OnnxRuntime
             // Create an array of empty tokens for the unconditional input.
             var blankTokenValue = 49407;
             var modelMaxLength = 77;
-            var inputIds = new List<Int32>();
+            var inputIds = new List<int>();
             inputIds.Add(49406);
             var pad = Enumerable.Repeat(blankTokenValue, modelMaxLength - inputIds.Count()).ToArray();
             inputIds.AddRange(pad);
@@ -77,10 +76,10 @@ namespace StableDiffusionMc.Revit.StableDiffusion.ML.OnnxRuntime
         public static DenseTensor<float> TextEncoder(int[] tokenizedInput, StableDiffusionConfig config)
         {
             // Create input tensor.
-            
+
             var input_ids = TensorHelper.CreateTensor(tokenizedInput, new[] { 1, tokenizedInput.Count() });
 
-            var input = new List<NamedOnnxValue> { NamedOnnxValue.CreateFromTensor<int>("input_ids", input_ids) };
+            var input = new List<NamedOnnxValue> { NamedOnnxValue.CreateFromTensor("input_ids", input_ids) };
 
             // Set CUDA EP
             var sessionOptions = config.GetSessionOptionsForEp();

@@ -1,15 +1,15 @@
 ﻿using Microsoft.ML.OnnxRuntime.Tensors;
 
-namespace StableDiffusion.ML.OnnxRuntime
+namespace StableDiffusionConsole.CustomPipeline
 {
     public class TensorHelper
     {
         public static DenseTensor<T> CreateTensor<T>(T[] data, int[] dimensions)
         {
-            
+
             return new DenseTensor<T>(data, dimensions); ;
         }
-        
+
         public static DenseTensor<float> DivideTensorByFloat(float[] data, float value, int[] dimensions)
         {
             for (int i = 0; i < data.Length; i++)
@@ -37,7 +37,7 @@ namespace StableDiffusion.ML.OnnxRuntime
 
         public static DenseTensor<float> AddTensors(float[] sample, float[] sumTensor, int[] dimensions)
         {
-            for(var i=0; i < sample.Length; i++)
+            for (var i = 0; i < sample.Length; i++)
             {
                 sample[i] = sample[i] + sumTensor[i];
             }
@@ -82,7 +82,7 @@ namespace StableDiffusion.ML.OnnxRuntime
                 var tensorToSum = tensorArray[m].ToArray();
                 for (var i = 0; i < tensorToSum.Length; i++)
                 {
-                    sumArray[i] += (float)tensorToSum[i];
+                    sumArray[i] += tensorToSum[i];
                 }
             }
 
@@ -126,7 +126,7 @@ namespace StableDiffusion.ML.OnnxRuntime
                 latentsArray[i] = (float)standardNormalRand;
             }
 
-            latents = TensorHelper.CreateTensor(latentsArray, latents.Dimensions.ToArray());
+            latents = CreateTensor(latentsArray, latents.Dimensions.ToArray());
 
             return latents;
 

@@ -1,26 +1,22 @@
-﻿using Microsoft.ML.OnnxRuntime.Tensors;
-using Microsoft.ML.OnnxRuntime;
-using SixLabors.ImageSharp.PixelFormats;
+﻿using Microsoft.ML.OnnxRuntime;
+using Microsoft.ML.OnnxRuntime.Tensors;
 using SixLabors.ImageSharp;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Text;
+using SixLabors.ImageSharp.PixelFormats;
 
-namespace StableDiffusionMc.Revit.StableDiffusion.ML.OnnxRuntime
+namespace StableDiffusionConsole.CustomPipeline
 {
     public static class VaeDecoder
     {
         public static Tensor<float> Decoder(List<NamedOnnxValue> input, StableDiffusionConfig config)
         {
-            
+
             var sessionOptions = config.GetSessionOptionsForEp();
             // Create an InferenceSession from the Model Path.
             var vaeDecodeSession = new InferenceSession(config.VaeDecoderOnnxPath, sessionOptions);
 
             // Run session and send the input data in to get inference output. 
             var output = vaeDecodeSession.Run(input);
-            var result = (output.ToList().First().Value as Tensor<float>);
+            var result = output.ToList().First().Value as Tensor<float>;
 
             return result;
         }
@@ -35,9 +31,9 @@ namespace StableDiffusionMc.Revit.StableDiffusion.ML.OnnxRuntime
                 for (var x = 0; x < width; x++)
                 {
                     result[x, y] = new Rgba32(
-                        (byte)(Math.Round(Math.Clamp((output[0, 0, y, x] / 2 + 0.5), 0, 1) * 255)),
-                        (byte)(Math.Round(Math.Clamp((output[0, 1, y, x] / 2 + 0.5), 0, 1) * 255)),
-                        (byte)(Math.Round(Math.Clamp((output[0, 2, y, x] / 2 + 0.5), 0, 1) * 255))
+                        (byte)Math.Round(Math.Clamp(output[0, 0, y, x] / 2 + 0.5, 0, 1) * 255),
+                        (byte)Math.Round(Math.Clamp(output[0, 1, y, x] / 2 + 0.5, 0, 1) * 255),
+                        (byte)Math.Round(Math.Clamp(output[0, 2, y, x] / 2 + 0.5, 0, 1) * 255)
                     );
                 }
             }

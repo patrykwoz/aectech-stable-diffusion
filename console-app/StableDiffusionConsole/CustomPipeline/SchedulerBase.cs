@@ -1,11 +1,7 @@
 ﻿using Microsoft.ML.OnnxRuntime.Tensors;
 using NumSharp;
-using StableDiffusion.ML.OnnxRuntime;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
-namespace StableDiffusionMc.Revit.StableDiffusion.ML.OnnxRuntime
+namespace StableDiffusionConsole.CustomPipeline
 {
     public abstract class SchedulerBase
     {
@@ -70,11 +66,11 @@ namespace StableDiffusionMc.Revit.StableDiffusion.ML.OnnxRuntime
         public DenseTensor<float> ScaleInput(DenseTensor<float> sample, int timestep)
         {
             // Get step index of timestep from TimeSteps
-            int stepIndex = this.Timesteps.IndexOf(timestep);
+            int stepIndex = Timesteps.IndexOf(timestep);
             // Get sigma at stepIndex
-            var sigma = this.Sigmas[stepIndex];
-            sigma = (float)Math.Sqrt((Math.Pow(sigma, 2) + 1));
-            
+            var sigma = Sigmas[stepIndex];
+            sigma = (float)Math.Sqrt(Math.Pow(sigma, 2) + 1);
+
 
             // Divide sample tensor shape {2,4,64,64} by sigma
             sample = TensorHelper.DivideTensorByFloat(sample.ToArray(), sigma, sample.Dimensions.ToArray());

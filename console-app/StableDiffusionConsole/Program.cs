@@ -1,21 +1,28 @@
 ﻿using SixLabors.ImageSharp;
-using StableDiffusionMc.Revit.StableDiffusion.ML.OnnxRuntime;
+using StableDiffusionConsole.CustomPipeline;
+using StableDiffusionConsole.OnnxStackPipeline;
 
 namespace StableDiffusionConsole
 {
     class Program
     {
-        static void Main(string[] args)
+        static async Task Main(string[] args)
         {
             Console.WriteLine("Simple Stable Diffusion Inference Console Application");
 
+            Console.WriteLine("Inference using OnnxStack (Image to Image) pipeline...");
+            Console.WriteLine("Starting inference...");
+            var inferenceApi = new InferenceApi();
+            var imagePath = await inferenceApi.RunInference();
+
+            Console.WriteLine($"Inference complete! Image saved to: {imagePath}");
+
             var prompt = "Astronaut riding a green horse on mars";
-            // Update paths to your models
             var modelsBasePath = @"C:\Users\patry\source\repos\stable-diffusion-v1-4";
 
             var config = new StableDiffusionConfig
             {
-                NumInferenceSteps = 15,
+                NumInferenceSteps = 50,
                 GuidanceScale = 7.5,
                 ExecutionProviderTarget = StableDiffusionConfig.ExecutionProvider.Cuda,
                 DeviceId = 0,

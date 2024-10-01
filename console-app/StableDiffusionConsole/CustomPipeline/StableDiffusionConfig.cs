@@ -1,9 +1,6 @@
 ﻿using Microsoft.ML.OnnxRuntime;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
-namespace StableDiffusionMc.Revit.StableDiffusion.ML.OnnxRuntime
+namespace StableDiffusionConsole.CustomPipeline
 {
     public class StableDiffusionConfig
     {
@@ -36,7 +33,7 @@ namespace StableDiffusionMc.Revit.StableDiffusion.ML.OnnxRuntime
             //sessionOptions.LogSeverityLevel = OrtLoggingLevel.ORT_LOGGING_LEVEL_VERBOSE;
 
 
-            switch (this.ExecutionProviderTarget)
+            switch (ExecutionProviderTarget)
             {
                 case ExecutionProvider.Cpu:
                     sessionOptions.AppendExecutionProvider_CPU();
@@ -47,7 +44,7 @@ namespace StableDiffusionMc.Revit.StableDiffusion.ML.OnnxRuntime
                     var gpuMemoryLimit = 11L * 1024 * 1024 * 1024;
 
                     var cudaOptionsDictionary = new Dictionary<string, string>();
-                    cudaOptionsDictionary["device_id"] = this.DeviceId.ToString();
+                    cudaOptionsDictionary["device_id"] = DeviceId.ToString();
                     cudaOptionsDictionary["gpu_mem_limit"] = gpuMemoryLimit.ToString();
                     cudaOptionsDictionary["cudnn_conv_algo_search"] = "DEFAULT";
                     cudaOptionsDictionary["arena_extend_strategy"] = "kNextPowerOfTwo";
@@ -57,7 +54,7 @@ namespace StableDiffusionMc.Revit.StableDiffusion.ML.OnnxRuntime
                     var cudaOptions = new OrtCUDAProviderOptions();
                     cudaOptions.UpdateOptions(cudaOptionsDictionary);
 
-                    
+
                     sessionOptions.GraphOptimizationLevel = GraphOptimizationLevel.ORT_ENABLE_ALL;
                     sessionOptions.ExecutionMode = ExecutionMode.ORT_PARALLEL;
                     sessionOptions.EnableMemoryPattern = true;

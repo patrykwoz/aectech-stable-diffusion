@@ -1,12 +1,11 @@
 ﻿using MathNet.Numerics;
 using Microsoft.ML.OnnxRuntime.Tensors;
 using NumSharp;
-using StableDiffusion.ML.OnnxRuntime;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace StableDiffusionMc.Revit.StableDiffusion.ML.OnnxRuntime
+namespace StableDiffusionConsole.CustomPipeline
 {
     public class LMSDiscreteScheduler : SchedulerBase
     {
@@ -50,12 +49,12 @@ namespace StableDiffusionMc.Revit.StableDiffusion.ML.OnnxRuntime
 
             alphas = betas.Select(beta => 1 - beta).ToList();
 
-            this._alphasCumulativeProducts = alphas.Select((alpha, i) => alphas.Take(i + 1).Aggregate((a, b) => a * b)).ToList();
+            _alphasCumulativeProducts = alphas.Select((alpha, i) => alphas.Take(i + 1).Aggregate((a, b) => a * b)).ToList();
             // Create sigmas as a list and reverse it
             var sigmas = _alphasCumulativeProducts.Select(alpha_prod => Math.Sqrt((1 - alpha_prod) / alpha_prod)).Reverse().ToList();
 
             // standard deviation of the initial noise distrubution
-            this.InitNoiseSigma = (float)sigmas.Max();
+            InitNoiseSigma = (float)sigmas.Max();
 
         }
 
@@ -73,12 +72,12 @@ namespace StableDiffusionMc.Revit.StableDiffusion.ML.OnnxRuntime
                     {
                         continue;
                     }
-                    prod *= (tau - this.Sigmas[t - k]) / (this.Sigmas[t - currentOrder] - this.Sigmas[t - k]);
+                    prod *= (tau - Sigmas[t - k]) / (Sigmas[t - currentOrder] - Sigmas[t - k]);
                 }
                 return prod;
             }
 
-            double integratedCoeff = Integrate.OnClosedInterval(LmsDerivative, this.Sigmas[t], this.Sigmas[t + 1], 1e-4);
+            double integratedCoeff = Integrate.OnClosedInterval(LmsDerivative, Sigmas[t], Sigmas[t + 1], 1e-4);
 
             return integratedCoeff;
         }
@@ -90,17 +89,17 @@ namespace StableDiffusionMc.Revit.StableDiffusion.ML.OnnxRuntime
             double stop = _numTrainTimesteps - 1;
             double[] timesteps = np.linspace(start, stop, num_inference_steps).ToArray<double>();
 
-            this.Timesteps = timesteps.Select(x => (int)x).Reverse().ToList();
+            Timesteps = timesteps.Select(x => (int)x).Reverse().ToList();
 
             var sigmas = _alphasCumulativeProducts.Select(alpha_prod => Math.Sqrt((1 - alpha_prod) / alpha_prod)).Reverse().ToList();
-            var range = np.arange((double)0, (double)(sigmas.Count)).ToArray<double>();
+            var range = np.arange(0, (double)sigmas.Count).ToArray<double>();
             sigmas = Interpolate(timesteps, range, sigmas).ToList();
-            this.Sigmas = new DenseTensor<float>(sigmas.Count());
+            Sigmas = new DenseTensor<float>(sigmas.Count());
             for (int i = 0; i < sigmas.Count(); i++)
             {
-                this.Sigmas[i] = (float)sigmas[i];
+                Sigmas[i] = (float)sigmas[i];
             }
-            return this.Timesteps.ToArray();
+            return Timesteps.ToArray();
 
         }
 
@@ -110,8 +109,8 @@ namespace StableDiffusionMc.Revit.StableDiffusion.ML.OnnxRuntime
                Tensor<float> sample,
                int order = 4)
         {
-            int stepIndex = this.Timesteps.IndexOf(timestep);
-            var sigma = this.Sigmas[stepIndex];
+            int stepIndex = Timesteps.IndexOf(timestep);
+            var sigma = Sigmas[stepIndex];
 
             // 1. compute predicted original sample (x_0) from sigma-scaled predicted noise
             Tensor<float> predOriginalSample;
@@ -121,25 +120,25 @@ namespace StableDiffusionMc.Revit.StableDiffusion.ML.OnnxRuntime
             var modelOutPutArray = modelOutput.ToArray();
             var sampleArray = sample.ToArray();
 
-            if (this._predictionType == "epsilon")
+            if (_predictionType == "epsilon")
             {
 
                 for (int i = 0; i < modelOutPutArray.Length; i++)
                 {
                     predOriginalSampleArray[i] = sampleArray[i] - sigma * modelOutPutArray[i];
                 }
-                
+
                 predOriginalSample = TensorHelper.CreateTensor(predOriginalSampleArray, modelOutput.Dimensions.ToArray());
 
             }
-            else if (this._predictionType == "v_prediction")
+            else if (_predictionType == "v_prediction")
             {
                 //predOriginalSample = modelOutput * ((-sigma / Math.Sqrt((Math.Pow(sigma,2) + 1))) + (sample / (Math.Pow(sigma,2) + 1)));
-                throw new Exception($"prediction_type given as {this._predictionType} not implemented yet.");
+                throw new Exception($"prediction_type given as {_predictionType} not implemented yet.");
             }
             else
             {
-                throw new Exception($"prediction_type given as {this._predictionType} must be one of `epsilon`, or `v_prediction`");
+                throw new Exception($"prediction_type given as {_predictionType} must be one of `epsilon`, or `v_prediction`");
             }
 
             // 2. Convert to an ODE derivative
@@ -154,12 +153,12 @@ namespace StableDiffusionMc.Revit.StableDiffusion.ML.OnnxRuntime
             }
             derivativeItems = TensorHelper.CreateTensor(derivativeItemsArray, derivativeItems.Dimensions.ToArray());
 
-            this.Derivatives?.Add(derivativeItems);
+            Derivatives?.Add(derivativeItems);
 
-            if (this.Derivatives?.Count() > order)
+            if (Derivatives?.Count() > order)
             {
                 // remove first element
-                this.Derivatives?.RemoveAt(0);
+                Derivatives?.RemoveAt(0);
             }
 
             // 3. compute linear multistep coefficients
@@ -168,13 +167,13 @@ namespace StableDiffusionMc.Revit.StableDiffusion.ML.OnnxRuntime
 
             // 4. compute previous sample based on the derivative path
             // Reverse list of tensors this.derivatives
-            var revDerivatives = Enumerable.Reverse(this.Derivatives).ToList();
+            var revDerivatives = Enumerable.Reverse(Derivatives).ToList();
 
             // Create list of tuples from the lmsCoeffs and reversed derivatives
             var lmsCoeffsAndDerivatives = lmsCoeffs.Zip(revDerivatives, (lmsCoeff, derivative) => (lmsCoeff, derivative));
 
             // Create tensor for product of lmscoeffs and derivatives
-            var lmsDerProduct = new Tensor<float>[this.Derivatives.Count()];
+            var lmsDerProduct = new Tensor<float>[Derivatives.Count()];
 
             for (int m = 0; m < lmsCoeffsAndDerivatives.Count(); m++)
             {

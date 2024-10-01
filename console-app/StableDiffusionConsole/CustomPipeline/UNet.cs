@@ -1,11 +1,7 @@
-﻿using Microsoft.ML.OnnxRuntime.Tensors;
-using Microsoft.ML.OnnxRuntime;
-using System;
-using System.Collections.Generic;
-using System.Text;
-using StableDiffusion.ML.OnnxRuntime;
+﻿using Microsoft.ML.OnnxRuntime;
+using Microsoft.ML.OnnxRuntime.Tensors;
 
-namespace StableDiffusionMc.Revit.StableDiffusion.ML.OnnxRuntime
+namespace StableDiffusionConsole.CustomPipeline
 {
     public class UNet
     {
@@ -47,7 +43,7 @@ namespace StableDiffusionMc.Revit.StableDiffusion.ML.OnnxRuntime
                 // generate randoms that are negative and positive
                 latentsArray[i] = (float)standardNormalRand * initNoiseSigma;
             }
-            
+
             latents = TensorHelper.CreateTensor(latentsArray, latents.Dimensions.ToArray());
 
             return latents;
@@ -72,10 +68,10 @@ namespace StableDiffusionMc.Revit.StableDiffusion.ML.OnnxRuntime
             return noisePred;
         }
 
-        public static SixLabors.ImageSharp.Image Inference(String prompt, StableDiffusionConfig config)
+        public static SixLabors.ImageSharp.Image Inference(string prompt, StableDiffusionConfig config)
         {
             // Preprocess text
-            
+
             var textEmbeddings = TextProcessing.PreprocessText(prompt, config);
 
             var scheduler = new LMSDiscreteScheduler();
@@ -89,8 +85,8 @@ namespace StableDiffusionMc.Revit.StableDiffusion.ML.OnnxRuntime
             // create latent tensor
             var latents = GenerateLatentSample(config, seed, scheduler.InitNoiseSigma);
 
-            var sessionOptions = config.GetSessionOptionsForEp();            
-                        
+            var sessionOptions = config.GetSessionOptionsForEp();
+
             // Create Inference Session
             var unetSession = new InferenceSession(config.UnetOnnxPath, sessionOptions);
 
@@ -117,7 +113,7 @@ namespace StableDiffusionMc.Revit.StableDiffusion.ML.OnnxRuntime
 
                 // Run Inference
                 var output = unetSession.Run(input);
-                var outputTensor = (output.ToList().First().Value as DenseTensor<float>);
+                var outputTensor = output.ToList().First().Value as DenseTensor<float>;
 
                 // Split tensors from 2,4,64,64 to 1,4,64,64
                 var splitTensors = TensorHelper.SplitTensor(outputTensor, new[] { 1, 4, config.Height / 8, config.Width / 8 });
@@ -133,7 +129,7 @@ namespace StableDiffusionMc.Revit.StableDiffusion.ML.OnnxRuntime
 
             // Scale and decode the image latents with vae.
             // latents = 1 / 0.18215 * latents
-            latents = TensorHelper.MultipleTensorByFloat(latents.ToArray(), (1.0f / 0.18215f), latents.Dimensions.ToArray());
+            latents = TensorHelper.MultipleTensorByFloat(latents.ToArray(), 1.0f / 0.18215f, latents.Dimensions.ToArray());
             var decoderInput = new List<NamedOnnxValue> { NamedOnnxValue.CreateFromTensor("latent_sample", latents) };
 
             // Decode image
