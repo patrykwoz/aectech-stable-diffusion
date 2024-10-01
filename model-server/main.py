@@ -56,6 +56,9 @@ async def generate_image_memory(
 
         image_data = await file.read()
         init_image = Image.open(io.BytesIO(image_data)).convert("RGB")
+        init_image = crop_and_resize_image(init_image)
+
+        init_image.save("init_image.png")
 
         image = obtain_image(
             prompt,
@@ -68,3 +71,21 @@ async def generate_image_memory(
         image.save(memory_stream, format="PNG")
         memory_stream.seek(0)
         return StreamingResponse(memory_stream, media_type="image/png")
+    
+
+def crop_and_resize_image(image: Image.Image, size: tuple[int, int] = (1024, 1024)) -> Image.Image:
+    width, height = image.size
+    if width > height:
+        left = (width - height) / 2
+        right = (width + height) / 2
+        top = 0
+        bottom = height
+    else:
+        left = 0
+        right = width
+        top = (height - width) / 2
+        bottom = (height + width) / 2
+
+    image = image.crop((left, top, right, bottom))
+    image = image.resize(size)
+    return image

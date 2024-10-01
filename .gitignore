@@ -8,3 +8,19 @@
 *.tflite  # TensorFlow Lite models
 *.pb  # TensorFlow Protocol Buffers
 *.bin
+
+*/text_encoder
+*/text_encoder_2
+*/unet
+*/vae_decoder
+*/vae_encoder
+*/models
+*/sd_img_img_onnx
+*/venv
+*/.ipynb_checkpoints
+*/.vscode
+*/.pytest_cache
+*/__pycache__
+
+*/sd_img_img_onnx_cuda
+*/sd_img_img_onnx
