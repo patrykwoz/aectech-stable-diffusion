@@ -1,11 +1,8 @@
-﻿using Microsoft.ML.OnnxRuntime.Tensors;
-using Microsoft.ML.OnnxRuntime;
-using SixLabors.ImageSharp.PixelFormats;
+﻿using Microsoft.ML.OnnxRuntime;
+using Microsoft.ML.OnnxRuntime.Tensors;
 using SixLabors.ImageSharp;
-using System;
-using System.Collections.Generic;
+using SixLabors.ImageSharp.PixelFormats;
 using System.IO;
-using System.Text;
 
 namespace StableDiffusionMc.Revit.StableDiffusion.ML.OnnxRuntime
 {

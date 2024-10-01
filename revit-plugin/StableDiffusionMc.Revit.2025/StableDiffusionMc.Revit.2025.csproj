@@ -38,6 +38,7 @@
     <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.135" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="NumSharp" Version="0.30.0" />
+    <PackageReference Include="OnnxStack.StableDiffusion" Version="0.39.0" />
     <PackageReference Include="Revit_All_Main_Versions_API_x64" Version="2025.0.0" />
     <PackageReference Include="SixLabors.ImageSharp" Version="3.1.5" />
     <PackageReference Include="System.Drawing.Common" Version="8.0.8" />
@@ -49,7 +50,7 @@
   </ItemGroup>
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="echo Copying results to 2025...&#xD;&#xA;if not exist &quot;%25AppData%25\Autodesk\Revit\Addins\2025\StableDiffusionMc&quot; mkdir &quot;%25AppData%25\Autodesk\Revit\Addins\2025\StableDiffusionMc&quot;&#xD;&#xA;xcopy /Q/Y &quot;$(TargetDir)*.dll&quot; &quot;%25AppData%25\Autodesk\Revit\Addins\2025\StableDiffusionMc&quot;&#xD;&#xA;xcopy /Q/Y &quot;$(TargetDir)zStableDiffusionMc.addin&quot; &quot;%25AppData%25\Autodesk\Revit\Addins\2025&quot;" />
+    <Exec Command="echo Copying results to 2025...&#xD;&#xA;if not exist &quot;%25AppData%25\Autodesk\Revit\Addins\2025\StableDiffusionMc&quot; mkdir &quot;%25AppData%25\Autodesk\Revit\Addins\2025\StableDiffusionMc&quot;&#xD;&#xA;xcopy /Q/Y &quot;$(TargetDir)*.dll&quot; &quot;%25AppData%25\Autodesk\Revit\Addins\2025\StableDiffusionMc&quot;&#xD;&#xA;xcopy /Q/Y &quot;$(TargetDir)zStableDiffusionMc.addin&quot; &quot;%25AppData%25\Autodesk\Revit\Addins\2025&quot;&#xD;&#xA;xcopy /Q/Y &quot;$(TargetDir)cliptokenizer.onnx&quot; &quot;C:\Program Files\Autodesk\Revit 2025&quot;" />
   </Target>
 
   <Import Project="..\StableDiffusionMc.Revit.SharedProject\StableDiffusionMc.Revit.SharedProject.projitems" Label="Shared" />
