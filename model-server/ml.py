@@ -20,7 +20,7 @@ pipe = pipe.to("cuda")
 def obtain_image(
     prompt: str,
     init_image: Image,
-    num_inference_steps: int = 10,
+    num_inference_steps: int = 50,
     strength: float = 0.85,
     guidance_scale: float = 7.5,
 ) -> Image:

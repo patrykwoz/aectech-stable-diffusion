@@ -21,3 +21,6 @@
 */.vscode
 */.pytest_cache
 */__pycache__
+
+*/sd_img_img_onnx_cuda
+*/sd_img_img_onnx

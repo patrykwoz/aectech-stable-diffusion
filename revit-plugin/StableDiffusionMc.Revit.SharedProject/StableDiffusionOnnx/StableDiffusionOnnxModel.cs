@@ -19,7 +19,8 @@ namespace StableDiffusionMc.Revit.StableDiffusionOnnx
             double strength = 0.85
             )
         {
-            var modelsBasePath = @"C:\Users\patry\source\repos\aectech-stable-diffusion\revit-plugin\models";
+            //var modelsBasePath = @"C:\Users\patry\source\repos\aectech-stable-diffusion\revit-plugin\models";
+            var modelsBasePath = @"C:\Users\patry\source\repos\stable-diffusion-v1-4";
             var config = new StableDiffusionConfig
             {
                 // Number of denoising steps

@@ -20,10 +20,13 @@
 			<RowDefinition Height="60" />
 		</Grid.RowDefinitions>
 		<Image Grid.Row="0"
-				Source="{Binding GeneratedImagePath, Mode=OneWay}"
-				Stretch="UniformToFill"
-				HorizontalAlignment="Stretch"
-				VerticalAlignment="Stretch"
+               Source="{Binding GeneratedImagePath, Mode=OneWay}"
+               Stretch="UniformToFill"
+               HorizontalAlignment="Stretch"
+               VerticalAlignment="Stretch"
+               Height="1024"
+               Width="1024"
+               
 				
 				/>
 		<StackPanel Grid.Row="1"

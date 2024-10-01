@@ -39,7 +39,8 @@ namespace StableDiffusionMc.Revit.StableDiffusionApi
                 HLRandWFViewsFileType = ImageFileType.PNG,
                 ImageResolution = ImageResolution.DPI_600,
                 ZoomType = ZoomFitType.FitToPage,
-                PixelSize = 1024
+                PixelSize = 1600,
+
 
             };
 
@@ -47,6 +48,8 @@ namespace StableDiffusionMc.Revit.StableDiffusionApi
 
             return imagePath;
         }
+
+
 
         public async Task<string> SendToServerAsync(
             string imagePath,
