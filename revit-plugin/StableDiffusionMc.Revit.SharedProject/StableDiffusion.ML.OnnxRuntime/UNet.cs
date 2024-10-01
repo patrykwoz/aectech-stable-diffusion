@@ -1,8 +1,5 @@
-﻿using Microsoft.ML.OnnxRuntime.Tensors;
-using Microsoft.ML.OnnxRuntime;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using Microsoft.ML.OnnxRuntime;
+using Microsoft.ML.OnnxRuntime.Tensors;
 
 namespace StableDiffusionMc.Revit.StableDiffusion.ML.OnnxRuntime
 {

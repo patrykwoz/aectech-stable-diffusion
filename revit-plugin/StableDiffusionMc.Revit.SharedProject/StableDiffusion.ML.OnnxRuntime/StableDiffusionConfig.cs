@@ -1,7 +1,4 @@
 ﻿using Microsoft.ML.OnnxRuntime;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace StableDiffusionMc.Revit.StableDiffusion.ML.OnnxRuntime
 {
@@ -26,7 +23,6 @@ namespace StableDiffusionMc.Revit.StableDiffusion.ML.OnnxRuntime
         public string TextEncoderOnnxPath = "";
         public string UnetOnnxPath = "";
         public string VaeDecoderOnnxPath = "";
-        //public string SafetyModelPath = "";
 
         // default directory for images
         public string ImageOutputPath = "";

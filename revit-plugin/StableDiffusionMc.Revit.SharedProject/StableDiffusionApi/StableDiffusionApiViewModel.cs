@@ -1,16 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using CommunityToolkit.Mvvm.Input;
-using System.Windows;
+﻿using CommunityToolkit.Mvvm.Input;
 using StableDiffusionMc.Revit.Core.Utilities.WPF;
-using System.Collections.ObjectModel;
-using CommunityToolkit.Mvvm.ComponentModel;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.ML.OnnxRuntime;
-using static StableDiffusionMc.Revit.StableDiffusionOnnx.StableDiffusionOnnxModel;
 using System.Diagnostics;
+using System.Windows;
+using static StableDiffusionMc.Revit.StableDiffusionOnnx.StableDiffusionOnnxModel;
 
 namespace StableDiffusionMc.Revit.StableDiffusionApi
 {
@@ -23,6 +15,8 @@ namespace StableDiffusionMc.Revit.StableDiffusionApi
         public RelayCommand Generate { get; set; }
 
         public RelayCommand GenerateOnnx { get; set; }
+
+        public RelayCommand GenerateOnnxImg2Img { get; set; }
 
         public string WorkingDirectory { get; set; }
 
@@ -75,6 +69,7 @@ namespace StableDiffusionMc.Revit.StableDiffusionApi
             Help = new RelayCommand(OnHelp);
             Generate = new RelayCommand(OnGenerate);
             GenerateOnnx = new RelayCommand(OnGenerateOnnx);
+            GenerateOnnxImg2Img = new RelayCommand(OnGenerateOnnxImg2Img);
 
             //var testPath = "C:\\Users\\patry\\Desktop\\stableDifussionBuildingSample.png";
             //GeneratedImages.Add(testPath);
@@ -116,19 +111,8 @@ namespace StableDiffusionMc.Revit.StableDiffusionApi
                 return;
             }
 
-
-            //var options = new SessionOptions();
-
-
-
             string generatedImagePath = null;
 
-            //var basicGenImgPath = await BasicInference(
-            //    capturedImagePath,
-            //    Prompt,
-            //    GuidanceScale,
-            //    Strength
-            //    );
             Debug.WriteLine("Starting Onnx Inference");
             try
             {
@@ -147,6 +131,45 @@ namespace StableDiffusionMc.Revit.StableDiffusionApi
                 Debug.WriteLine(e.Message);
             }
             
+
+            if (string.IsNullOrEmpty(generatedImagePath))
+            {
+                MessageBox.Show("Failed to generate image");
+                return;
+            }
+
+            GeneratedImagePath = generatedImagePath;
+        }
+
+        private async void OnGenerateOnnxImg2Img()
+        {
+            var capturedImagePath = Model.ExportViewAsImagePath();
+            if (string.IsNullOrEmpty(capturedImagePath))
+            {
+                MessageBox.Show("Failed to capture image");
+                return;
+            }
+
+            string generatedImagePath = null;
+
+            Debug.WriteLine("Starting Onnx Inference");
+            try
+            {
+                generatedImagePath = await InferWithOnnxStack(
+                capturedImagePath,
+                Prompt,
+                GuidanceScale,
+                (float)Strength
+                );
+
+                Debug.WriteLine("Finished Onnx Inference");
+
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e.Message);
+            }
+
 
             if (string.IsNullOrEmpty(generatedImagePath))
             {

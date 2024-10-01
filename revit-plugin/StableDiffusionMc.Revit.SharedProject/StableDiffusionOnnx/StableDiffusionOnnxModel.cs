@@ -1,5 +1,11 @@
 ﻿using Microsoft.ML.OnnxRuntime;
+using OnnxStack.Core.Image;
+using OnnxStack.StableDiffusion.Config;
+using OnnxStack.StableDiffusion.Enums;
+using OnnxStack.StableDiffusion.Pipelines;
 using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.PixelFormats;
+using SixLabors.ImageSharp.Processing;
 using StableDiffusionMc.Revit.StableDiffusion.ML.OnnxRuntime;
 using System.Diagnostics;
 using System.IO;
@@ -15,22 +21,13 @@ namespace StableDiffusionMc.Revit.StableDiffusionOnnx
             double strength = 0.85
             )
         {
-            //var modelsBasePath = @"C:\Users\patry\source\repos\aectech-stable-diffusion\revit-plugin\models";
             var modelsBasePath = @"C:\Users\patry\source\repos\stable-diffusion-v1-4";
-            var config = new StableDiffusionConfig
+            var config = new StableDiffusion.ML.OnnxRuntime.StableDiffusionConfig
             {
-                // Number of denoising steps
                 NumInferenceSteps = 15,
-                // Scale for classifier-free guidance
                 GuidanceScale = guidanceScale,
-                // Set your preferred Execution Provider. Currently (GPU, DirectML, CPU) are supported in this project.
-                // ONNX Runtime supports many more than this. Learn more here: https://onnxruntime.ai/docs/execution-providers/
-                // The config is defaulted to CUDA. You can override it here if needed.
-                // To use DirectML EP intall the Microsoft.ML.OnnxRuntime.DirectML and uninstall Microsoft.ML.OnnxRuntime.GPU
-                ExecutionProviderTarget = StableDiffusionConfig.ExecutionProvider.Cuda,
-                // Set GPU Device ID.
+                ExecutionProviderTarget = StableDiffusion.ML.OnnxRuntime.StableDiffusionConfig.ExecutionProvider.Cuda,
                 DeviceId = 0,
-                // Update paths to your models
                 TextEncoderOnnxPath = Path.Combine(modelsBasePath, "text_encoder", "model.onnx"),
                 UnetOnnxPath = Path.Combine(modelsBasePath, "unet", "model.onnx"),
                 VaeDecoderOnnxPath = Path.Combine(modelsBasePath, "vae_decoder", "model.onnx"),
@@ -50,23 +47,79 @@ namespace StableDiffusionMc.Revit.StableDiffusionOnnx
 
             image.SaveAsPng(genImgPath);
 
-
             return genImgPath;
         }
 
-        public static async Task<string> BasicInference (
+        public static async Task<string> InferWithOnnxStack(
             string imagePath,
             string prompt,
             double guidanceScale = 7.5,
-            double strength = 0.85
+            float strength = 0.85f
             )
         {
-            var modelsBasePath = @"C:\Users\patry\source\repos\aectech-stable-diffusion\revit-plugin\models";
-            using var options = new SessionOptions();
-            options.RegisterOrtExtensions();
-            var session = new InferenceSession(modelsBasePath, options);
 
-            return null;
+            var executionProvider = OnnxStack.Core.Config.ExecutionProvider.Cuda;
+
+            var modelPath = @"C:\Users\patry\source\repos\aectech-stable-diffusion\onnx-utilities\sd_img_img_onnx_cuda";
+
+            var pipeline = StableDiffusionXLPipeline.CreatePipeline(modelPath, ModelType.Base, 0, executionProvider, MemoryModeType.Minimum);
+
+            var outputImagePath = @"C:\Users\patry\Desktop\Output_ImageToImage.png";
+
+            var croppedImage = CropAndResizeImage(Image.Load<Rgba32>(imagePath), 1024, 1024);
+            croppedImage.Save(imagePath);
+            
+            var inputImage = await OnnxImage.FromFileAsync(imagePath);
+            
+            var promptOptions = new PromptOptions
+            {
+                DiffuserType = DiffuserType.ImageToImage,
+                Prompt = prompt,
+                InputImage = inputImage
+
+            };
+
+            var schedulerOptions = pipeline.DefaultSchedulerOptions with
+            {
+                // How much the output should look like the input
+                Strength = strength,
+                InferenceSteps = 10
+            };
+
+            Debug.WriteLine($"Inference with prompt: {prompt}");
+
+            var result = await pipeline.GenerateImageAsync(promptOptions, schedulerOptions);
+
+            Debug.WriteLine($"Finished Inference");
+
+            await result.SaveAsync(outputImagePath);
+
+            await pipeline.UnloadAsync();
+
+            return outputImagePath;
+        }
+
+        public static Image<Rgba32> CropAndResizeImage(Image<Rgba32> image, int width = 1024, int height = 1024)
+        {
+            int originalWidth = image.Width;
+            int originalHeight = image.Height;
+            Rectangle cropRectangle;
+
+            if (originalWidth > originalHeight)
+            {
+                int left = (originalWidth - originalHeight) / 2;
+                cropRectangle = new Rectangle(left, 0, originalHeight, originalHeight);
+            }
+            else
+            {
+                int top = (originalHeight - originalWidth) / 2;
+                cropRectangle = new Rectangle(0, top, originalWidth, originalWidth);
+            }
+
+            image.Mutate(x => x.Crop(cropRectangle));
+            image.Mutate(x => x.Resize(width, height));
+
+            return image;
         }
     }
 }

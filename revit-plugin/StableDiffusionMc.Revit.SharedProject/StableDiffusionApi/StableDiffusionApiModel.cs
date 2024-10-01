@@ -1,11 +1,8 @@
 ﻿using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
-using System;
 using System.IO;
-using System.Collections.Generic;
-using System.Net.Http.Headers;
 using System.Net.Http;
-using System.Text;
+using System.Net.Http.Headers;
 
 namespace StableDiffusionMc.Revit.StableDiffusionApi
 {

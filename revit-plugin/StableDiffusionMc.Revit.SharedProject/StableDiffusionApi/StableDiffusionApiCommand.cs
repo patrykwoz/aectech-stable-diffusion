@@ -1,13 +1,10 @@
 ﻿using Autodesk.Revit.Attributes;
 using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
-using System;
-using System.Collections.Generic;
+using StableDiffusionMc.Revit.Core.Utilities;
 using System.Diagnostics;
 using System.Reflection;
-using System.Text;
 using System.Windows.Interop;
-using StableDiffusionMc.Revit.Core.Utilities;
 
 namespace StableDiffusionMc.Revit.StableDiffusionApi
 {
@@ -36,8 +33,6 @@ namespace StableDiffusionMc.Revit.StableDiffusionApi
                 };
 
                 v.ShowDialog();
-
-
 
             }
             catch (Exception ex)
