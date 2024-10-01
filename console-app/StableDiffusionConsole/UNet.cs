@@ -85,43 +85,17 @@ namespace StableDiffusionMc.Revit.StableDiffusion.ML.OnnxRuntime
             var seed = new Random().Next();
             //var seed = 329922609;
             Console.WriteLine($"Seed generated: {seed}");
-            // create latent tensor
 
+            // create latent tensor
             var latents = GenerateLatentSample(config, seed, scheduler.InitNoiseSigma);
 
-            //var sessionOptions = config.GetSessionOptionsForEp();v
-            var gpuMemoryLimit = 11L * 1024 * 1024 * 1024;
-
-            var cudaOptionsDictionary = new Dictionary<string, string>();
-            cudaOptionsDictionary["device_id"] = "0";
-            cudaOptionsDictionary["gpu_mem_limit"] = gpuMemoryLimit.ToString();
-            cudaOptionsDictionary["cudnn_conv_algo_search"] = "DEFAULT";
-            cudaOptionsDictionary["arena_extend_strategy"] = "kNextPowerOfTwo";
-            cudaOptionsDictionary["cudnn_conv_use_max_workspace"] = "1";
-            cudaOptionsDictionary["use_tf32"] = "0";
-            
-
-
-
-            var cudaOptions = new OrtCUDAProviderOptions();
-            
-            cudaOptions.UpdateOptions(cudaOptionsDictionary);
-
-
-            var sessionOptions = new SessionOptions();
-            sessionOptions.RegisterOrtExtensions();
-            sessionOptions.GraphOptimizationLevel = GraphOptimizationLevel.ORT_ENABLE_ALL;
-            sessionOptions.ExecutionMode = ExecutionMode.ORT_PARALLEL;
-            sessionOptions.EnableMemoryPattern = true;
-            sessionOptions.EnableProfiling = true;
-            sessionOptions.AppendExecutionProvider_CUDA(cudaOptions);
-            //sessionOptions.AppendExecutionProvider_CPU();
-            
+            var sessionOptions = config.GetSessionOptionsForEp();            
                         
             // Create Inference Session
             var unetSession = new InferenceSession(config.UnetOnnxPath, sessionOptions);
 
             Console.WriteLine("Model loaded successfully!");
+
             Console.WriteLine("Model input metadata:");
 
             foreach (var inputMeta in unetSession.InputMetadata)
@@ -135,13 +109,10 @@ namespace StableDiffusionMc.Revit.StableDiffusion.ML.OnnxRuntime
             var input = new List<NamedOnnxValue>();
             for (int t = 0; t < timesteps.Length; t++)
             {
-                // torch.cat([latents] * 2)
                 var latentModelInput = TensorHelper.Duplicate(latents.ToArray(), new[] { 2, 4, config.Height / 8, config.Width / 8 });
 
-                // latent_model_input = scheduler.scale_model_input(latent_model_input, timestep = t)
                 latentModelInput = scheduler.ScaleInput(latentModelInput, timesteps[t]);
 
-                Console.WriteLine($"scaled model input {latentModelInput[0]} at step {t}. Max {latentModelInput.Max()} Min{latentModelInput.Min()}");
                 input = CreateUnetModelInput(textEmbeddings, latentModelInput, timesteps[t]);
 
                 // Run Inference
@@ -158,8 +129,6 @@ namespace StableDiffusionMc.Revit.StableDiffusion.ML.OnnxRuntime
 
                 // LMS Scheduler Step
                 latents = scheduler.Step(noisePred, timesteps[t], latents);
-                Console.WriteLine($"latents result after step {t} min {latents.Min()} max {latents.Max()}");
-
             }
 
             // Scale and decode the image latents with vae.

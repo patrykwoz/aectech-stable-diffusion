@@ -43,10 +43,27 @@ namespace StableDiffusionMc.Revit.StableDiffusion.ML.OnnxRuntime
                     return sessionOptions;
                 default:
                 case ExecutionProvider.Cuda:
+                    // Adjust this based on your GPU memory
+                    var gpuMemoryLimit = 11L * 1024 * 1024 * 1024;
+
+                    var cudaOptionsDictionary = new Dictionary<string, string>();
+                    cudaOptionsDictionary["device_id"] = this.DeviceId.ToString();
+                    cudaOptionsDictionary["gpu_mem_limit"] = gpuMemoryLimit.ToString();
+                    cudaOptionsDictionary["cudnn_conv_algo_search"] = "DEFAULT";
+                    cudaOptionsDictionary["arena_extend_strategy"] = "kNextPowerOfTwo";
+                    cudaOptionsDictionary["cudnn_conv_use_max_workspace"] = "1";
+                    cudaOptionsDictionary["use_tf32"] = "0";
+
+                    var cudaOptions = new OrtCUDAProviderOptions();
+                    cudaOptions.UpdateOptions(cudaOptionsDictionary);
+
+                    
                     sessionOptions.GraphOptimizationLevel = GraphOptimizationLevel.ORT_ENABLE_ALL;
-                    //var cudaOptions = new OrtCUDAProviderOptions();
-                    //sessionOptions.AppendExecutionProvider_CUDA(cudaOptions);
-                    sessionOptions.AppendExecutionProvider_CUDA(this.DeviceId);
+                    sessionOptions.ExecutionMode = ExecutionMode.ORT_PARALLEL;
+                    sessionOptions.EnableMemoryPattern = true;
+                    sessionOptions.EnableProfiling = true;
+                    sessionOptions.AppendExecutionProvider_CUDA(cudaOptions);
+
                     return sessionOptions;
             }
         }
