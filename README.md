@@ -1,6 +1,6 @@
 # Stable Diffusion Inference Inside Revit⚡
 
-This repository provides a setup for running Stable Diffusion inference directly within Revit, offering three different approaches tailored to varying levels of expertise and deployment needs:
+This repository provides a setup for running Stable Diffusion inference directly in Revit, offering three different approaches tailored to varying levels of expertise and deployment needs:
 
 1. **Using a Python backend**:
 
@@ -39,6 +39,7 @@ pip install torch torchvision torchaudio --index-url https://download.pytorch.or
 ```
 git clone https://github.com/patrykwoz/aectech-stable-diffusion.git
 ```
+
 
 ### Setup for Developing the Python Server
 
@@ -88,6 +89,9 @@ dotnet build
  * In Visual Studio, right-click the project in Solution Explorer and go to Properties.
  * Under the Debug tab, specify the path to your local Revit installation's Revit.exe file. This ensures that Revit will be launched with the plugin when debugging.
 
- 5. Start debugging by running the project in Visual Studio. This should launch Revit with the plugin loaded for development and testing.
+ 5. Follow the [Diffusion Models Setup Guide](./diffusion-models-setup.md) to download and setup your diffusion models
+ 
+ 6. Start debugging by running the project in Visual Studio. This should launch Revit with the plugin loaded for development and testing.
 
-
+## Useful links
+Coming soon...
