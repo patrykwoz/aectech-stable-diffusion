@@ -1,12 +1,8 @@
-﻿using System;
-using System.IO;
-using System.Collections.Generic;
-using System.Text;
+﻿using Microsoft.ML.OnnxRuntime;
 using SixLabors.ImageSharp;
-using SixLabors.ImageSharp.Memory;
 using StableDiffusionMc.Revit.StableDiffusion.ML.OnnxRuntime;
-using Microsoft.ML.OnnxRuntime;
 using System.Diagnostics;
+using System.IO;
 
 namespace StableDiffusionMc.Revit.StableDiffusionOnnx
 {
