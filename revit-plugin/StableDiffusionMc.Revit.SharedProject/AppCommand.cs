@@ -1,7 +1,4 @@
 ﻿using Autodesk.Revit.UI;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using Microsoft.Xaml.Behaviors;
 
 namespace StableDiffusionMc.Revit
@@ -22,6 +19,7 @@ namespace StableDiffusionMc.Revit
             }
             catch (Exception ex)
             {
+                
                 //Logger.Fatal(ex);
             }
 

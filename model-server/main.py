@@ -37,9 +37,9 @@ async def generate_image(
             guidance_scale=guidance_scale,
             strength=strength,
         )
+
         image.save("image.png")
         return FileResponse("image.png")
-
 
 @app.post("/generate-memory")
 async def generate_image_memory(
@@ -65,6 +65,7 @@ async def generate_image_memory(
             init_image=init_image,
             guidance_scale=guidance_scale,
             strength=strength,
+            num_inference_steps=10,
         )
 
         memory_stream = io.BytesIO()
