@@ -74,8 +74,9 @@ pipe_controlnet = StableDiffusionXLControlNetPipeline.from_pretrained(
     torch_dtype=torch.float16,
 )
 pipe_controlnet = pipe_controlnet.to("cuda")
-# pipe_controlnet.enable_model_cpu_offload()
-
+pipe_controlnet.enable_model_cpu_offload()
+pipe_controlnet.enable_xformers_memory_efficient_attention()
+pipe_controlnet.unet = torch.compile(pipe_controlnet.unet, mode="reduce-overhead", fullgraph=True)
 
 def obtain_control_net_image(
         prompt: str,
