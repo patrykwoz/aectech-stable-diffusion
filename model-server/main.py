@@ -7,7 +7,7 @@ from PIL import Image, ImageOps
 from fastapi import FastAPI, File, UploadFile
 from fastapi.responses import FileResponse, StreamingResponse
 
-from ml import text_to_image, obtain_image, obtain_control_net_image
+from ml import obtain_control_net_image
 
 app = FastAPI()
 
@@ -15,74 +15,74 @@ app = FastAPI()
 def read_root():
     return {"Hello": "World"}
 
-@app.post("/generate")
-async def generate_image(
-    prompt: str =  "a pixar style, highfidelity image of a building in the middle of a forest",
-    file: UploadFile | None = File(None),
-    guidance_scale: float = 7.5,
-    strength: float = 0.5,
-):
-    if not file:
-        raise ValueError("No file uploaded") 
-    else:
-        if file.content_type not in ["image/jpeg", "image/png"]:
-            return {"error": "File format not supported. Please upload a .jpg or .png image."}
+# @app.post("/generate")
+# async def generate_image(
+#     prompt: str =  "a pixar style, highfidelity image of a building in the middle of a forest",
+#     file: UploadFile | None = File(None),
+#     guidance_scale: float = 7.5,
+#     strength: float = 0.5,
+# ):
+#     if not file:
+#         raise ValueError("No file uploaded") 
+#     else:
+#         if file.content_type not in ["image/jpeg", "image/png"]:
+#             return {"error": "File format not supported. Please upload a .jpg or .png image."}
 
-        image_data = await file.read()
-        init_image = Image.open(io.BytesIO(image_data)).convert("RGB")
+#         image_data = await file.read()
+#         init_image = Image.open(io.BytesIO(image_data)).convert("RGB")
 
-        image = obtain_image(
-            prompt,
-            init_image=init_image,
-            guidance_scale=guidance_scale,
-            strength=strength,
-        )
+#         image = obtain_image(
+#             prompt,
+#             init_image=init_image,
+#             guidance_scale=guidance_scale,
+#             strength=strength,
+#         )
 
-        image.save("image.png")
-        return FileResponse("image.png")
+#         image.save("image.png")
+#         return FileResponse("image.png")
     
-@app.post("/text-to-image")
-async def generate_image_from_text(prompt: str = "Astronaut riding a horse"):
-    image = text_to_image(prompt)
-    memory_stream = io.BytesIO()
-    image.save(memory_stream, format="PNG")
-    memory_stream.seek(0)
-    return StreamingResponse(memory_stream, media_type="image/png")
+# @app.post("/text-to-image")
+# async def generate_image_from_text(prompt: str = "Astronaut riding a horse"):
+#     image = text_to_image(prompt)
+#     memory_stream = io.BytesIO()
+#     image.save(memory_stream, format="PNG")
+#     memory_stream.seek(0)
+#     return StreamingResponse(memory_stream, media_type="image/png")
 
-@app.post("/generate-memory")
-async def generate_image_memory(
-    prompt: str =  "a pixar style, highfidelity image of a building in the middle of a forest",
-    file: UploadFile | None = File(None),
-    num_inference_steps: int = 50,
-    guidance_scale: float = 7.5,
-    strength: float = 0.85,
-    seed: int = None,
-):
-    if not file:
-        raise ValueError("No file uploaded")
-    else:
-        if file.content_type not in ["image/jpeg", "image/png"]:
-            raise ValueError("File format not supported. Please upload a .jpg or .png image.")
+# @app.post("/generate-memory")
+# async def generate_image_memory(
+#     prompt: str =  "a pixar style, highfidelity image of a building in the middle of a forest",
+#     file: UploadFile | None = File(None),
+#     num_inference_steps: int = 50,
+#     guidance_scale: float = 7.5,
+#     strength: float = 0.85,
+#     seed: int = None,
+# ):
+#     if not file:
+#         raise ValueError("No file uploaded")
+#     else:
+#         if file.content_type not in ["image/jpeg", "image/png"]:
+#             raise ValueError("File format not supported. Please upload a .jpg or .png image.")
 
-        image_data = await file.read()
-        init_image = Image.open(io.BytesIO(image_data)).convert("RGB")
-        init_image = crop_and_resize_image(init_image)
+#         image_data = await file.read()
+#         init_image = Image.open(io.BytesIO(image_data)).convert("RGB")
+#         init_image = crop_and_resize_image(init_image)
 
-        init_image.save("init_image.png")
+#         init_image.save("init_image.png")
 
-        image = obtain_image(
-            prompt,
-            init_image=init_image,
-            guidance_scale=guidance_scale,
-            strength=strength,
-            num_inference_steps=num_inference_steps,
-            seed=seed,
-        )
+#         image = obtain_image(
+#             prompt,
+#             init_image=init_image,
+#             guidance_scale=guidance_scale,
+#             strength=strength,
+#             num_inference_steps=num_inference_steps,
+#             seed=seed,
+#         )
 
-        memory_stream = io.BytesIO()
-        image.save(memory_stream, format="PNG")
-        memory_stream.seek(0)
-        return StreamingResponse(memory_stream, media_type="image/png")
+#         memory_stream = io.BytesIO()
+#         image.save(memory_stream, format="PNG")
+#         memory_stream.seek(0)
+#         return StreamingResponse(memory_stream, media_type="image/png")
 
 @app.post("/generate-controlnet")
 async def generate_control_net_image(
@@ -103,6 +103,7 @@ async def generate_control_net_image(
     image_data = await file.read()
     init_image = Image.open(io.BytesIO(image_data)).convert("RGB")
     init_image = crop_and_resize_image(init_image)
+    init_image.save("init_image_controlnet.png")
 
     image = obtain_control_net_image(
         prompt,
@@ -113,6 +114,54 @@ async def generate_control_net_image(
         controlnet_conditioning_scale=controlnet_conditioning_scale,
         seed=seed,
     )
+
+    memory_stream = io.BytesIO()
+    image.save(memory_stream, format="PNG")
+    memory_stream.seek(0)
+    return StreamingResponse(memory_stream, media_type="image/png")
+
+@app.post("/generate-controlnet-invert")
+async def generate_control_net_image_invert(
+    prompt: str = "aerial view, a futuristic house in a bright foggy jungle, hard lighting",
+    negative_prompt: str = "low quality, bad quality, sketches",
+    file: UploadFile = File(...),
+    num_inference_steps: int = 50,
+    guidance_scale: float = 5.0,
+    controlnet_conditioning_scale: float = 0.5,
+    strength: float = 0.4,
+    seed: int = None,
+):
+    if not file:
+        raise ValueError("No file uploaded")
+    else:
+        if file.content_type not in ["image/jpeg", "image/png"]:
+            raise ValueError("File format not supported. Please upload a .jpg or .png image.")
+
+    image_data = await file.read()
+    init_image = Image.open(io.BytesIO(image_data)).convert("RGB")
+    init_image = crop_and_resize_image(init_image)
+    init_image = ImageOps.invert(init_image)
+    init_image.save("init_image_controlnet_invert.png")
+
+    image = obtain_control_net_image(
+        prompt,
+        negative_prompt,
+        init_image=init_image,
+        num_inference_steps=num_inference_steps,
+        guidance_scale=guidance_scale,
+        controlnet_conditioning_scale=controlnet_conditioning_scale,
+        seed=seed,
+        strength=strength,
+    )
+
+    # refined_image = obtain_image(
+    #     prompt,
+    #     init_image=image,
+    #     guidance_scale=guidance_scale,
+    #     strength=strength,
+    # )
+
+    # image = refined_image
 
     memory_stream = io.BytesIO()
     image.save(memory_stream, format="PNG")
